@@ -1,0 +1,38 @@
+// Delete movie that doesn't exist.
+DELETE http://localhost:80/api/v1/movies/1
+
+###
+
+// Create a Movie
+POST http://localhost:80/api/v1/movies
+Content-Type: application/json
+
+{
+  "MovieName": "La era del hielo",
+  "GuessedTimes": 1,
+  "SelectedTimes": 2,
+  "ImageURL": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffrasesdelapelicula.com%2Fwp-content%2Fuploads%2F2013%2F07%2FLa-Era-De-Hielo.jpg&f=1&nofb=1"
+}
+
+> {% client.global.set("movieId", response.body.movieId); %}
+
+###
+
+// Update a Movie
+PUT http://localhost:80/api/v1/movies/{{movieId}}
+Content-Type: application/json
+
+{
+  "GuessedTimes": 1,
+  "SelectedTimes": 1
+}
+
+###
+
+// Top twenty most guessed movies.
+GET http://localhost:80/api/v1/movies?pageSize=10&sortOrder=Guessed
+
+###
+
+// Get random movie.
+GET http://localhost:80/api/v1/movies/random
