@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using Entities;
 using Factory;
+using Infrastructure.Data.Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +26,12 @@ namespace Web
 
         public Startup(IConfiguration configuration)
         {
-            
             Configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.AddCors(options => options.AddPolicy("AllowMyOrigin", builder =>
             {
                 builder.AllowAnyOrigin();
@@ -55,7 +56,9 @@ namespace Web
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<DbContext>();
                 context.Database.Migrate();
+                MovieSeeding.loadSeedData(context);
             }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
